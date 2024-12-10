@@ -16,7 +16,7 @@ async function snoozeTab(hours) {
 
   // Save tab details in local storage
   await chrome.storage.local.set({
-    [alarmName]: { url: currentTab.url, snoozeTime }
+    [alarmName]: { url: currentTab.url, snoozeTime, title: currentTab.title },
   });
 
   // Create an alarm
@@ -29,6 +29,16 @@ async function snoozeTab(hours) {
 }
 
 function removeSnooze(alarmName) {
+  const confirmMessage = "Do you want to remove the snooze and open the tab?";
+  if (confirm(confirmMessage)) {
+    chrome.storage.local.get(alarmName, (item) => {
+      if (item[alarmName]) {
+        const { url } = item[alarmName];
+        chrome.tabs.create({ url }); // Open the tab
+      }
+    });
+  }
+  
   chrome.alarms.clear(alarmName);
   chrome.storage.local.remove(alarmName);
   alert("Tab unsnoozed.");
@@ -48,34 +58,46 @@ function listSnoozed() {
     if (Object.keys(items).length) {
       const header = document.createElement("h2");
       header.style.marginTop = "10px";
-      header.style.marginBottom = "10px";
+      header.style.marginBottom = "5px";
       header.textContent = "Snoozed tabs";
       snoozeListDiv.appendChild(header);
     }
 
+    // order items by snooze time - ascending
+    const orderedItems = Object.keys(items).sort((a, b) => items[a].snoozeTime - items[b].snoozeTime);
+    const newObj = {};
+    orderedItems.forEach(key => newObj[key] = items[key]); // Keep the data intact
+
+    items = newObj; // Now items is the sorted object
+
     for (const key in items) {
       if (key.startsWith("snooze-")) {
-        const { url, snoozeTime } = items[key];
+        const { url, snoozeTime, title } = items[key];
         const snoozeTimeStr = new Date(snoozeTime).toLocaleString();
         const listItem = document.createElement("li");
         listItem.style.display = "flex";
+        listItem.style.marginTop = "5px";
         listItem.style.alignItems = "center";
         listItem.style.flexDirection = "row";
         listItem.style.justifyContent = "space-between";
-        listItem.textContent = `${url} - ${snoozeTimeStr}`;
+        listItem.style.overflow = "hidden";
+        listItem.style.whiteSpace = "nowrap";
+        listItem.style.textOverflow = "ellipsis";
+
+        const data = title || url;
+        listItem.innerHTML = `<span title="${data}" style="flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${data}</span> <span style="font-weight: bold;margin-right:10px;">${snoozeTimeStr}</span>`;
         snoozeListDiv.appendChild(listItem);
 
         // Add a button to remove snooze
         const removeButton = document.createElement("button");
         removeButton.textContent = "Remove";
         removeButton.style.width = 'auto'
+        removeButton.style.margin = '0';
         removeButton.addEventListener("click", () => removeSnooze(key));
         listItem.appendChild(removeButton);
       }
     }
   });
 }
-
-
 
 listSnoozed();
