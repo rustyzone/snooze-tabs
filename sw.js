@@ -1,21 +1,57 @@
 try{
 
 // Function to reopen tabs and clean up expired entries
+// Lock to prevent concurrent execution
+let isCheckingTabs = false;
+
 async function checkForSnoozedTabs() {
+  if (isCheckingTabs) {
+    console.log("checkForSnoozedTabs is already running. Skipping execution.");
+    return;
+  }
+
+  isCheckingTabs = true; // Set the lock
+
+  try {
     const now = Date.now();
     const items = await chrome.storage.local.get(null); // Get all stored items
-  
+
     for (const [key, value] of Object.entries(items)) {
       if (value.snoozeTime && value.snoozeTime <= now) {
+        if (value.processing) {
+          // Skip entries already being processed
+          console.log(`Skipping ${key}, already processing.`);
+          continue;
+        }
+
+        // Mark as processing to avoid duplicates
+        value.processing = true;
+        await chrome.storage.local.set({ [key]: value });
+
         // Reopen the tab
-        chrome.tabs.create({ url: value.url });
-  
-        // Remove the item from storage
-        await chrome.storage.local.remove(key);
-        console.log(`Reopened tab and cleared snooze: ${key}`);
+        try {
+          await chrome.tabs.create({ url: value.url });
+          console.log(`Reopened tab: ${value.url}`);
+
+          // Remove the entry from storage
+          await chrome.storage.local.remove(key);
+          console.log(`Cleared snooze entry: ${key}`);
+        } catch (error) {
+          console.error(`Failed to reopen tab for ${key}:`, error);
+
+          // Cleanup processing flag in case of failure
+          value.processing = false;
+          await chrome.storage.local.set({ [key]: value });
+        }
       }
     }
+  } catch (error) {
+    console.error("Error in checkForSnoozedTabs:", error);
+  } finally {
+    isCheckingTabs = false; // Release the lock
   }
+}
+
   
   // Listener for alarms
   chrome.alarms.onAlarm.addListener(async (alarm) => {
