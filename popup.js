@@ -1,7 +1,7 @@
 document.getElementById("snooze1hour").addEventListener("click", () => snoozeTab(1));
 document.getElementById("snooze1day").addEventListener("click", () => snoozeTab(24));
 document.getElementById("snooze1week").addEventListener("click", () => snoozeTab(24 * 7));
-document.getElementById("snooze2min").addEventListener("click", () => snoozeTab(0.0333));
+document.getElementById("snooze10min").addEventListener("click", () => snoozeTab(0.17));
 
 const snoozeListDiv = document.getElementById("snooze-list");
 async function snoozeTab(hours) {
