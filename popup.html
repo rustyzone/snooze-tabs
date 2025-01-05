@@ -1,37 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tab Snoozer</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f0f0f0;
-      width: 400px;
+    :root {
+      --primary: #4CAF50;
+      --primary-hover: #45a049;
+      --secondary: #2196F3;
+      --secondary-hover: #1976D2;
+      --background: #ffffff;
+      --text: #1a1a1a;
+      --shadow: rgba(0, 0, 0, 0.1);
     }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 16px;
+      width: 400px;
+      background-color: var(--background);
+      color: var(--text);
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 0 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .snooze-grid {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
     button {
-      margin: 10px 0;
-      padding: 10px;
+      padding: 12px;
       width: 100%;
-      background-color: #4CAF50;
+      background-color: var(--primary);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px var(--shadow);
     }
+
     button:hover {
-      background-color: #45a049;
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+
+    #snooze-list {
+      margin-top: 20px;
+      border-top: 1px solid #eaeaea;
+      padding-top: 16px;
+    }
+
+    .snoozed-tab {
+      background: #f8f8f8;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .snoozed-tab:last-child {
+      margin-bottom: 0;
+    }
+
+    .tab-info {
+      flex: 1;
+      margin-right: 12px;
+    }
+
+    .tab-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tab-time {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .remove-btn {
+      background: #ff4444;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      min-width: 70px;
+    }
+
+    .remove-btn:hover {
+      background: #ff2222;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .custom-snooze {
+      background-color: var(--secondary);
+    }
+
+    .custom-snooze:hover {
+      background-color: var(--secondary-hover);
+    }
+
+    .empty-message {
+      color: #666;
+      text-align: center;
+      padding: 20px 0;
     }
   </style>
 </head>
 <body>
   <h3>Snooze Tab</h3>
-  <button id="snooze2min">Snooze for 2 Minutes</button>
-  <button id="snooze1hour">Snooze for 1 Hour</button>
-  <button id="snooze1day">Snooze for 1 Day</button>
-  <button id="snooze1week">Snooze for 1 Week</button>
-  <div id="snooze-list"></div>
+  
+  <div class="snooze-grid">
+    <button id="snooze10min">Snooze for 10 Minutes</button>
+    <button id="snooze1hour">Snooze for 1 Hour</button>
+    <button id="snooze1day">Snooze for 1 Day</button>
+    <button id="snooze1week">Snooze for 1 Week</button>
+    <!-- TODO: add later <button id="snoozeCustom" class="custom-snooze">Custom Snooze...</button> -->
+  </div>
+
+  <div id="snooze-list">
+    <div class="section-title">Snoozed tabs</div>
+  </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
+
