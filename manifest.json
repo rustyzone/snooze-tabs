@@ -3,7 +3,7 @@
     "description": "Snooze tabs for later",
     "name": "Tab Snoozer",
     "author": "Rusty",
-    "version": "1.0",
+    "version": "1.0.1",
     "permissions": ["storage", "activeTab", "alarms"],
     "background": {
       "service_worker": "sw.js"
