@@ -4,13 +4,11 @@ Tab Snoozer is a Chrome extension that helps you manage your browser tabs by all
 
 ## Features
 - Snooze the current tab for:
-  - 2 Minutes 
   - 1 Hour
   - 1 Day
   - 1 Week
 - Automatically reopens snoozed tabs at the selected time.
 - Provides a fallback mechanism (heartbeat) to ensure tabs reopen even if alarms fail.
-
 ## How It Works
 1. Open the extension popup by clicking the extension icon.
 2. Select the snooze duration (1 Hour, 1 Day, or 1 Week).
@@ -19,6 +17,61 @@ Tab Snoozer is a Chrome extension that helps you manage your browser tabs by all
    - The tab is reopened automatically.
    - The URL is removed from Chrome storage to maintain a clean state.
 5. A fallback mechanism runs every 5 minutes to check for missed or overdue tabs.
+
+### Smart Timing Options
+
+The extension provides context-aware snooze options that change based on the time of day:
+
+- **Quick Options** (Always available)
+  - Snooze for 10 minutes
+  - Snooze for 1 hour
+
+- **Context-Aware Options**
+  - Morning (before 12 PM)
+    - "Snooze until 2 PM"
+  - Afternoon (12 PM - 5 PM)
+    - "Snooze until this evening (6 PM)"
+  - Evening/Night (after 5 PM)
+    - "Snooze until tomorrow morning (9 AM)"
+
+- **Weekend Planning**
+  - Weekdays (Monday-Friday)
+    - "Snooze until Saturday morning (10 AM)"
+  - Weekends (Saturday-Sunday)
+    - "Snooze until Monday morning (9 AM)"
+
+### Custom Date & Time
+
+Click "Pick Date & Time" to choose any specific date and time to snooze your tab until.
+
+### Recurring Snooze
+
+The recurring snooze feature lets you automatically reopen tabs on specific days at a set time.
+
+#### Setting up a Recurring Snooze:
+1. Click "Set Recurring Snooze"
+2. Choose the time you want the tab to reopen
+3. Select which days of the week you want it to recur
+4. Click "Set Recurring"
+
+#### Managing Recurring Snoozes:
+- Recurring tabs are marked with a 🔄 symbol in the snoozed tabs list
+- To stop a recurring snooze:
+  1. Find the tab in the snoozed list
+  2. Click "Remove"
+  3. When prompted, choose "Remove all future occurrences" to stop the recurring schedule
+  4. Choose "Cancel" to keep the recurring schedule but remove just this instance
+
+## Tips
+- The snooze options update every minute to stay context-aware
+- You can see all your snoozed tabs in the list below the snooze options
+- Hover over a tab title to see the full URL if it's too long to display
+- Times are shown in your local timezone
+
+## Technical Details
+- Recurring snoozes are stored separately from regular snoozes to maintain the schedule
+- The extension uses Chrome's alarm API to ensure reliable tab reopening
+- All snoozed tabs and their schedules persist even if you close Chrome
 
 ## Permissions Used
 ### 1. `activeTab`

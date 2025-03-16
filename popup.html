@@ -78,8 +78,7 @@
       margin-bottom: 8px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
+      gap: 12px;
     }
 
     .snoozed-tab:last-child {
@@ -88,7 +87,7 @@
 
     .tab-info {
       flex: 1;
-      margin-right: 12px;
+      min-width: 0;
     }
 
     .tab-title {
@@ -105,12 +104,18 @@
     }
 
     .remove-btn {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      padding: 0;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #ff4444;
       color: white;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      min-width: 70px;
+      font-size: 18px;
     }
 
     .remove-btn:hover {
@@ -136,17 +141,260 @@
       text-align: center;
       padding: 20px 0;
     }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: var(--background);
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 80%;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .modal h4 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+
+    .modal input[type="datetime-local"],
+    .modal input[type="time"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #eaeaea;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .modal-buttons button {
+      width: auto;
+      min-width: 80px;
+    }
+
+    .modal-cancel {
+      background-color: #666 !important;
+    }
+
+    .days-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .days-selector label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .recurring-options {
+      margin-bottom: 16px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 8px 16px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s ease;
+    }
+
+    .tab-button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-button .count {
+      display: inline-block;
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: #666;
+    }
+
+    .empty-state p {
+      margin: 0;
+    }
+
+    .empty-state .empty-subtitle {
+      font-size: 13px;
+      margin-top: 8px;
+      color: #999;
+    }
+
+    /* Add this for the close icon */
+    .close-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      position: relative;
+    }
+
+    .close-icon::before,
+    .close-icon::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background-color: currentColor;
+      top: 50%;
+      left: 0;
+    }
+
+    .close-icon::before {
+      transform: rotate(45deg);
+    }
+
+    .close-icon::after {
+      transform: rotate(-45deg);
+    }
+
+    .modal-message {
+      margin: 0 0 20px 0;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .modal-buttons-vertical {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modal-buttons-vertical button {
+      width: 100%;
+    }
+
+    .modal-remove-only {
+      background-color: #ff4444 !important;
+    }
+
+    .modal-remove-only:hover {
+      background-color: #ff2222 !important;
+    }
+
+    .modal-remove-single {
+      background-color: var(--secondary) !important;
+    }
+
+    .modal-remove-single:hover {
+      background-color: var(--secondary-hover) !important;
+    }
   </style>
 </head>
 <body>
   <h3>Snooze Tab</h3>
   
   <div class="snooze-grid">
-    <button id="snooze10min">Snooze for 10 Minutes</button>
-    <button id="snooze1hour">Snooze for 1 Hour</button>
-    <button id="snooze1day">Snooze for 1 Day</button>
-    <button id="snooze1week">Snooze for 1 Week</button>
-    <!-- TODO: add later <button id="snoozeCustom" class="custom-snooze">Custom Snooze...</button> -->
+    <!-- Buttons will be dynamically inserted here -->
+  </div>
+
+  <!-- Add modal for custom date/time -->
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <h4>Pick Date & Time</h4>
+      <input type="datetime-local" id="customDateTime">
+      <div class="modal-buttons">
+        <button class="modal-cancel">Cancel</button>
+        <button class="modal-confirm">Snooze</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add modal for recurring snooze -->
+  <div id="recurringModal" class="modal">
+    <div class="modal-content">
+      <h4>Set Recurring Snooze</h4>
+      <div class="recurring-options">
+        <input type="time" id="recurringTime" required>
+        <div class="days-selector">
+          <label><input type="checkbox" value="1"> Mon</label>
+          <label><input type="checkbox" value="2"> Tue</label>
+          <label><input type="checkbox" value="3"> Wed</label>
+          <label><input type="checkbox" value="4"> Thu</label>
+          <label><input type="checkbox" value="5"> Fri</label>
+          <label><input type="checkbox" value="6"> Sat</label>
+          <label><input type="checkbox" value="0"> Sun</label>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-cancel">Cancel</button>
+        <button class="modal-confirm">Set Recurring</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this after the other modals -->
+  <div id="removeModal" class="modal">
+    <div class="modal-content">
+      <h4>Remove Snooze</h4>
+      <p class="modal-message">Would you like to remove the snooze and open the tab?</p>
+      <div class="modal-buttons">
+        <button class="modal-cancel">Cancel</button>
+        <button class="modal-confirm">Remove & Open</button>
+        <button class="modal-remove-only">Just Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this for recurring remove confirmation -->
+  <div id="removeRecurringModal" class="modal">
+    <div class="modal-content">
+      <h4>Remove Recurring Snooze</h4>
+      <p class="modal-message">This is a recurring snooze. What would you like to do?</p>
+      <div class="modal-buttons modal-buttons-vertical">
+        <button class="modal-confirm">Remove All Future Occurrences & Open Tab</button>
+        <button class="modal-remove-only">Remove All Future Occurrences</button>
+        <button class="modal-remove-single">Remove Only This Occurrence</button>
+        <button class="modal-cancel">Cancel</button>
+      </div>
+    </div>
   </div>
 
   <div id="snooze-list">
