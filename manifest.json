@@ -6,7 +6,7 @@
     "version": "1.0.1",
     "permissions": ["storage", "activeTab", "alarms"],
     "background": {
-      "service_worker": "sw.js"
+      "scripts": ["sw.js"]
     },
     "action": {
       "default_popup": "popup.html",
@@ -20,6 +20,12 @@
       "16": "icon.png",
       "48": "icon.png",
       "128": "icon.png"
+    },
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "rz.rustyzone@snooze.com",
+        "strict_min_version": "109.0"
+      }
     }
   }
   
