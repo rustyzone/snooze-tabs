@@ -1,9 +1,10 @@
 {
     "manifest_version": 3,
-    "description": "Snooze tabs for later",
-    "name": "Tab Snoozer",
+    "description": "Easily snooze tabs with a click! Set timers to hide distracting tabs and automatically bring them back when you need them again.",
+    "name": "Tab Snoozer - Snooze tabs in a click",
+    "short_name": "Tab Snoozer",
     "author": "Rusty",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "permissions": ["storage", "activeTab", "alarms"],
     "background": {
       "service_worker": "sw.js"
